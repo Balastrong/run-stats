@@ -1,0 +1,10 @@
+{
+  "name": "Run Stats",
+  "short_name": "Run Stats",
+  "description": "A simple mobile UI for Garmin run statistics",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#edf2ec",
+  "theme_color": "#17261d",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

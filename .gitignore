@@ -1,0 +1,7 @@
+.env
+node_modules/
+.pnpm-store/
+dist/
+.output/
+.test-dist/
+artifacts/

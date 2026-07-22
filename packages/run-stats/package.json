@@ -1,0 +1,44 @@
+{
+  "name": "run-stats",
+  "version": "0.2.0",
+  "description": "Retrieve compact run statistics from Garmin Connect",
+  "type": "module",
+  "bin": {
+    "run-stats": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./format": {
+      "types": "./dist/format.d.ts",
+      "import": "./dist/format.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "dev": "node src/cli.ts",
+    "start": "node dist/cli.js",
+    "test": "node --test src/*.test.ts",
+    "prepack": "pnpm build"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "commander": "^15.0.0",
+    "dotenv": "^17.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "typescript": "^7.0.2"
+  }
+}
