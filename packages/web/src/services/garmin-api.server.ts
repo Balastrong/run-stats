@@ -9,6 +9,7 @@ import {
   getMostRecentRun,
 } from "run-stats";
 
+import { LoginRateLimiter } from "./login-rate-limit.server.ts";
 import { createSessionCodec, type SessionCodec } from "./session.ts";
 
 export async function apiResponse(
@@ -18,10 +19,14 @@ export async function apiResponse(
     return await handler();
   } catch (error) {
     console.error(error);
-    return json(error instanceof HttpError ? error.status : 500, {
-      error:
-        error instanceof HttpError ? error.message : "Internal server error",
-    });
+    return json(
+      error instanceof HttpError ? error.status : 500,
+      {
+        error:
+          error instanceof HttpError ? error.message : "Internal server error",
+      },
+      error instanceof HttpError ? error.headers : undefined,
+    );
   }
 }
 
@@ -30,13 +35,13 @@ export async function authStatus(request: Request): Promise<Response> {
 }
 
 export async function login(request: Request): Promise<Response> {
-  checkLoginRateLimit(clientAddress(request));
   const body = await readJson(request);
   const email = text(body.email).trim();
   const password = text(body.password);
   const mfaCode = text(body.mfaCode).trim();
   if (!email || !password)
     throw new HttpError(400, "Email and password are required");
+  checkLoginRateLimit(email);
 
   try {
     const tokens = await authenticateGarmin(email, password, async (method) => {
@@ -135,10 +140,12 @@ class MfaRequired extends Error {
 
 class HttpError extends Error {
   readonly status: number;
+  readonly headers?: HeadersInit;
 
-  constructor(status: number, message: string) {
+  constructor(status: number, message: string, headers?: HeadersInit) {
     super(message);
     this.status = status;
+    this.headers = headers;
   }
 }
 
@@ -216,24 +223,12 @@ function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
-function clientAddress(request: Request): string {
-  return (
-    request.headers.get("cf-connecting-ip") ??
-    request.headers.get("x-real-ip") ??
-    request.headers.get("x-forwarded-for")?.split(",", 1)[0]?.trim() ??
-    "unknown"
-  );
-}
-
-const loginAttempts = new Map<string, { count: number; resetsAt: number }>();
-function checkLoginRateLimit(address: string): void {
-  const now = Date.now();
-  const current = loginAttempts.get(address);
-  const attempt =
-    !current || current.resetsAt <= now
-      ? { count: 1, resetsAt: now + 10 * 60_000 }
-      : { ...current, count: current.count + 1 };
-  loginAttempts.set(address, attempt);
-  if (attempt.count > 10)
-    throw new HttpError(429, "Too many login attempts; try again later");
+const loginRateLimiter = new LoginRateLimiter();
+function checkLoginRateLimit(email: string): void {
+  const result = loginRateLimiter.consume(email);
+  if (!result.allowed) {
+    throw new HttpError(429, "Too many login attempts; try again later", {
+      "Retry-After": String(result.retryAfterSeconds),
+    });
+  }
 }

@@ -132,5 +132,7 @@ NITRO_PRESET=netlify pnpm build
 NITRO_PRESET=cloudflare-module pnpm build
 ```
 
-The built-in login limiter is process-local. For a public multi-instance deployment,
-also configure rate limiting at the provider, reverse proxy, or WAF.
+The built-in login limiter is process-local, bounded, and applies both per-account and
+global limits without trusting client-supplied forwarding headers. For a public
+multi-instance deployment, also configure distributed rate limiting at the provider,
+reverse proxy, or WAF.
