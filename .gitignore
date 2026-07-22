@@ -1,3 +1,5 @@
+.DS_Store
+.tokensave/
 .env
 node_modules/
 .pnpm-store/

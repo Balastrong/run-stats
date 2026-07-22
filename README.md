@@ -3,6 +3,11 @@
 `run-stats` is a full-stack TypeScript web app for browsing compact Garmin Connect
 statistics. It retrieves and formats data only; it does not call an AI or assess runs.
 
+> [!IMPORTANT]
+> This is an independent, unofficial project. It is not affiliated with, endorsed by,
+> or supported by Garmin. The current integration uses private, undocumented Garmin
+> Connect endpoints that may change or stop working without notice.
+
 The repository is a pnpm workspace with two packages:
 
 - `packages/web` is the private TanStack Start web app.

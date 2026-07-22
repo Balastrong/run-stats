@@ -2,6 +2,7 @@
   "name": "run-stats",
   "version": "0.2.0",
   "description": "Retrieve compact run statistics from Garmin Connect",
+  "license": "MIT",
   "type": "module",
   "bin": {
     "run-stats": "./dist/cli.js"
