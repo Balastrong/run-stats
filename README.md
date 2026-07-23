@@ -56,13 +56,13 @@ pnpm dev:cli -- show 23584703311 --format json
 pnpm dev:cli -- bulk 20
 ```
 
-| Command | Purpose | Useful options |
-| --- | --- | --- |
-| `login` | Authenticate with Garmin and save a refreshable session | `--email <email>` |
-| `recent` | List recent runs and their activity IDs | `--limit <number>` (default: `10`) |
-| `latest` | Print the most recent run | `--format markdown\|json` |
-| `show <activity-id>` | Print one run by Garmin activity ID | `--format markdown\|json` |
-| `bulk [count]` | Print compact summaries for several runs | default count: `50` |
+| Command              | Purpose                                                 | Useful options                     |
+| -------------------- | ------------------------------------------------------- | ---------------------------------- |
+| `login`              | Authenticate with Garmin and save a refreshable session | `--email <email>`                  |
+| `recent`             | List recent runs and their activity IDs                 | `--limit <number>` (default: `10`) |
+| `latest`             | Print the most recent run                               | `--format markdown\|json`          |
+| `show <activity-id>` | Print one run by Garmin activity ID                     | `--format markdown\|json`          |
+| `bulk [count]`       | Print compact summaries for several runs                | default count: `50`                |
 
 Garmin is currently the only registered source. You can select it explicitly by
 placing the global option before the command:
@@ -96,8 +96,7 @@ run-stats recent
 To test a global link before publishing:
 
 ```sh
-pnpm --filter run-stats build
-pnpm --filter run-stats link --global
+pnpm link:cli
 run-stats recent
 ```
 
@@ -123,11 +122,11 @@ The CLI registry is currently configured in `packages/run-stats/src/cli.ts`.
 
 ## Configuration
 
-| Variable | Used by | Description |
-| --- | --- | --- |
-| `GARMIN_TOKEN_FILE` | CLI and library | Overrides the default Garmin token-file path |
-| `WEB_SESSION_SECRET` | Web app | Encrypts browser sessions; required in production and must contain at least 32 characters |
-| `NITRO_PRESET` | Web build | Selects a Nitro deployment target |
+| Variable             | Used by         | Description                                                                               |
+| -------------------- | --------------- | ----------------------------------------------------------------------------------------- |
+| `GARMIN_TOKEN_FILE`  | CLI and library | Overrides the default Garmin token-file path                                              |
+| `WEB_SESSION_SECRET` | Web app         | Encrypts browser sessions; required in production and must contain at least 32 characters |
+| `NITRO_PRESET`       | Web build       | Selects a Nitro deployment target                                                         |
 
 In development, the web app generates an ephemeral session secret if
 `WEB_SESSION_SECRET` is absent; restarting the server then logs out browser
@@ -142,15 +141,15 @@ This repository is a pnpm workspace:
 
 Common commands:
 
-| Command | Description |
-| --- | --- |
-| `pnpm dev` | Build the library, then start the web development server |
-| `pnpm dev:web` | Start only the web development server |
-| `pnpm dev:cli -- <args>` | Run the CLI directly from TypeScript source |
-| `pnpm check` | Type-check both packages |
-| `pnpm test` | Build the library and run all tests |
-| `pnpm build` | Build both packages |
-| `pnpm pack:cli --dry-run` | Inspect the npm tarball without publishing |
+| Command                   | Description                                              |
+| ------------------------- | -------------------------------------------------------- |
+| `pnpm dev`                | Build the library, then start the web development server |
+| `pnpm dev:web`            | Start only the web development server                    |
+| `pnpm dev:cli -- <args>`  | Run the CLI directly from TypeScript source              |
+| `pnpm check`              | Type-check both packages                                 |
+| `pnpm test`               | Build the library and run all tests                      |
+| `pnpm build`              | Build both packages                                      |
+| `pnpm pack:cli --dry-run` | Inspect the npm tarball without publishing               |
 
 Tests use synthetic activity records and do not contact Garmin.
 

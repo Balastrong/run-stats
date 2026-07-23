@@ -9,6 +9,7 @@
     "dev:web": "pnpm --filter @run-stats/web dev",
     "dev:cli": "pnpm --filter run-stats dev",
     "pack:cli": "pnpm --filter run-stats pack",
+    "link:cli": "pnpm --filter run-stats build && pnpm --dir packages/run-stats add -g .",
     "start": "pnpm --filter @run-stats/web start",
     "start:cli": "pnpm --filter run-stats start",
     "test": "pnpm --filter run-stats build && pnpm -r test"
